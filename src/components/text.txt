@@ -1,0 +1,52 @@
+Sure, here's an example code in Vue.js to achieve that:
+
+```vue
+<template>
+  <div>
+    <input type="file" ref="fileInput" @change="onFileChange">
+    <button @click="uploadImage">Upload Image</button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      file: null
+    }
+  },
+  methods: {
+    onFileChange(event) {
+      this.file = event.target.files[0];
+    },
+    uploadImage() {
+      // Check if file is an image
+      if (!this.file.type.startsWith('image/')) {
+        console.log('Please upload an image file');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', this.file);
+
+      // Post the image using Fetch API
+      fetch('/upload-image', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        console.log('Image uploaded successfully');
+      })
+      .catch(error => {
+        console.error('Error uploading image:', error);
+      });
+    }
+  }
+}
+</script>
+```
+
+This code creates a Vue component with an input element for selecting a file and a button for uploading the image. 
+It listens for the `change` event on the input element and sets the selected file to the component's `file` data property. 
+When the button is clicked, it checks whether the file is an image by checking its MIME type, then creates a `FormData` object and 
+appends the file to it. Finally, it sends a `POST` request to a server endpoint with `fetch`, passing the `FormData` object as the request body.
